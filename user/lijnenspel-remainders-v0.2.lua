@@ -1,5 +1,5 @@
----- https://llllllll.co/t/remainders-a-modulo-gesture-generator-for-crow/40084
 --- Remainders (version 0.2-draft)
+-- https://llllllll.co/t/remainders-a-modulo-gesture-generator-for-crow/40084
 -- modulo gesture generator/cv divider
 -- Input a voltage and get 4 folded outputs based on a simple modulo operation. Perfect for your one knob to rule them all.
 

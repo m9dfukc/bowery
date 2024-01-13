@@ -1,7 +1,7 @@
----- https://llllllll.co/t/rungler-for-crow/51905
 --- Rungler for Crow v 3.1 //////// Imminent gloom
---  The rungler is designed by Rob Hordijk and is described here:
---  https://electro-music.com/forum/topic-38081.html
+-- https://llllllll.co/t/rungler-for-crow/51905
+-- The rungler is designed by Rob Hordijk and is described here:
+-- https://electro-music.com/forum/topic-38081.html
 
 --      Input 1: Clock
 --      Input 2: Data to be sampled into the shift-registers.

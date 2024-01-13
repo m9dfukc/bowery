@@ -7,15 +7,37 @@
 -- in 2: Transpose in (Great for quantised melodies)
 -- out 1-4: Voltages being folded 1 to 4 times, top to bottom. eg. Output 4 has modulo of 2 meaning it recents to 0V with every 2V increment meaning it folds 4 times.
 
+
+minVal = 0;
+maxVal = 0;
+peakToPeak = 0;
+
 function init()
-  input[1].mode( 'stream', 0.01 )
+  input[1].mode('stream', 0.01)
+  input[2].mode('change', 1, 0.1, 'rising')
   for n=1,4 do output[n].slew = 0.01 end
 end
 
+function calcBounds(v)
+  if (v < minVal) then
+    minVal = v;
+  end
+  if (v > maxVal) then
+    maxVal = v;
+  end
+  peakToPeak = math.abs(minVal) + math.abs(maxVal);
+end
+
+input[2].change = function()
+  minVal = 0;
+  maxVal = 0;
+  peakToPeak = 0;
+end
+
 input[1].stream = function(v)
-  transpose = input[2].volts
+  calcBounds(v)
   for n=1,4 do
-      remainder = v % (10/(n+1))
-      output[n].volts = math.min(remainder + transpose, 10)
+      remainder = v % (peakToPeak/(n+1))
+      output[n].volts = (remainder * (n + 1)) - math.abs(minVal)
   end
 end

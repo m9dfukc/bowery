@@ -1,5 +1,5 @@
----- https://llllllll.co/t/rungler-for-crow/51905
 --- rungler for crow v2.1 //////// Imminent gloom
+-- https://llllllll.co/t/rungler-for-crow/51905
 -- the Rungler is Rob Hordijks idea; it's a very good idea.
 -- my best guess at one based on https://electro-music.com/forum/topic-38081.html
 

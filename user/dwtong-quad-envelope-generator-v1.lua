@@ -1,6 +1,5 @@
----- https://llllllll.co/t/crow-ideas/25867/139
 --- quad envelope generator
---
+-- https://llllllll.co/t/quad-envelope-generator/35778
 -- input[1] controls sequence of envelope triggers
 -- input[2] controls env release
 -- arp rate is based on distance between the values of both inputs
