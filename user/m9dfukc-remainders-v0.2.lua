@@ -26,7 +26,8 @@ outputs_folds = {3,5,8,13}
 disting_folds = {4,6,7,10}
 
 -- Configure input voltage range
-voltage_range = 10
+voltage_range = 10.0
+rotation_step = voltage_range / 10.0
 
 ii.disting.event = function(event, value)
     if event.name == 'parameter' then
@@ -84,12 +85,12 @@ input[1].stream = function(v)
     if disting then
         ii.disting.get('parameter', 1)
         ii.disting.get('parameter', 2)
-        param1_normalized = map_range(param1_min, param1_max, 0, 10, param1)
-        param2_normalized = map_range(param2_min, param2_max, 0, 10, param2)
+        param1_normalized = map_range(param1_min, param1_max, 0, voltage_range, param1)
+        param2_normalized = map_range(param2_min, param2_max, 0, voltage_range, param2)
         v = v + param1_normalized
     end
 
-    rotation = math.ceil(input[2].volts + param2_normalized / 2)
+    rotation = math.ceil(input[2].volts + param2_normalized / rotation_step)
 
     for n=1,4 do
         p = rotate(rotation, n)
