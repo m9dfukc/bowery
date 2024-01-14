@@ -9,6 +9,7 @@
 
 -- Comment next line (with two hyphens) if you don't have a Disting EX.
 disting = true
+disting_ready = false
 disting_algorithm = 1
 disting_param_offset = 6
 
@@ -28,6 +29,42 @@ disting_folds = {4,6,7,10}
 -- Configure input voltage range
 voltage_range = 10.0
 rotation_step = voltage_range / 10.0
+
+function init()
+    input[1].mode('stream', 0.005)
+    input[2].mode('stream', 0.005)
+    for n=1,4 do output[n].slew = 0.005 end
+    if disting then
+        ii.fastmode(true)
+        ii.disting.algorithm(disting_algorithm)
+        ii.disting.get( 'parameter_min', 1 )
+        ii.disting.get( 'parameter_max', 1 )
+        ii.disting.get( 'parameter_min', 2 )
+        ii.disting.get( 'parameter_max', 2 )
+    end
+end
+
+disting_init = function()
+    if disting_ready == false then
+        ii.disting.get('algorithm')
+        ii.disting.algorithm(disting_algorithm)
+    end
+end
+
+map_range = function(a1, a2, b1, b2, s)
+    if a2 - a1 == 0 then return 0.0 end
+    return b1 + (s - a1) * (b2 - b1) / (a2 - a1)
+end
+
+rotate = function(rotation, n)
+    return (n + math.abs(rotation) - 1) % 4 + 1
+end
+
+calc_remainder = function(v, folds)
+    fold_voltage = voltage_range / folds
+    remainder = (v % fold_voltage) * folds
+    return remainder
+end
 
 ii.disting.event = function(event, value)
     if event.name == 'parameter' then
@@ -51,42 +88,20 @@ ii.disting.event = function(event, value)
             param2_max = value
         end
     end
-end
-
-function init()
-    input[1].mode('stream', 0.005)
-    input[2].mode('stream', 0.005)
-    for n=1,4 do output[n].slew = 0.005 end
-    if disting then
-        ii.fastmode(true)
-        ii.disting.algorithm(disting_algorithm)
-        ii.disting.get( 'parameter_min', 1 )
-        ii.disting.get( 'parameter_max', 1 )
-        ii.disting.get( 'parameter_min', 2 )
-        ii.disting.get( 'parameter_max', 2 )
+    if event.name == 'algorithm' then
+        if value == disting_algorithm then
+            disting_ready = true
+        end
     end
-end
-
-map_range = function(a1, a2, b1, b2, s)
-    return b1 + (s - a1) * (b2 - b1) / (a2 - a1)
-end
-
-rotate = function(rotation, n)
-    return (n + math.abs(rotation) - 1) % 4 + 1
-end
-
-calc_remainder = function(v, folds)
-    fold_voltage = voltage_range / folds
-    remainder = (v % fold_voltage) * folds
-    return remainder
 end
 
 input[1].stream = function(v)
     if disting then
+        disting_init()
         ii.disting.get('parameter', 1)
         ii.disting.get('parameter', 2)
-        param1_normalized = map_range(param1_min, param1_max, 0, voltage_range, param1)
-        param2_normalized = map_range(param2_min, param2_max, 0, voltage_range, param2)
+        param1_normalized = map_range(param1_min, param1_max, 0.0, voltage_range, param1)
+        param2_normalized = map_range(param2_min, param2_max, 0.0, voltage_range, param2)
         v = v + param1_normalized
     end
 
