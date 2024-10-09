@@ -31,9 +31,9 @@ voltage_range = 10.0
 rotation_step = voltage_range / 10.0
 
 function init()
-    input[1].mode('stream', 0.005)
-    input[2].mode('stream', 0.005)
-    for n=1,4 do output[n].slew = 0.005 end
+    input[1].mode('stream', 0.009)
+    input[2].mode('stream', 0.009)
+    for n=1,4 do output[n].slew = 0.009 end
     if disting then
         ii.fastmode(true)
         ii.disting.algorithm(disting_algorithm)
